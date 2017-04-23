@@ -33,7 +33,16 @@ public class Role implements java.io.Serializable {
 	@JoinColumn(name="menu_id")
 	private Set<Menu> menu;
 	
-	
+	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)
+	private Set<User> user;
+
+	public Set<User> getUser() {
+		return user;
+	}
+
+	public void setUser(Set<User> user) {
+		this.user = user;
+	}
 
 	public Long getRole_id() {
 		return role_id;

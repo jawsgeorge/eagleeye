@@ -25,7 +25,7 @@ public class Menu implements java.io.Serializable {
 	private String menuName;
 	
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.LAZY)
 	private Set<Role> role;
 
 	
