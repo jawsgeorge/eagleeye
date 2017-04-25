@@ -40,7 +40,6 @@ public class Menu implements java.io.Serializable {
 
 	
 
-
 	@Override
 	public String toString() {
 		return "Menu [menu_id=" + menu_id + ", menuName=" + menuName + ", role=" + role + "]";

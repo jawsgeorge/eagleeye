@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eagleeye.restful.model.Employee;
 import com.eagleeye.restful.model.Menu;
+import com.eagleeye.restful.model.ResponseEagle;
 import com.eagleeye.restful.model.Role;
 import com.eagleeye.restful.service.AddMenu;
 import com.eagleeye.restful.service.AddRole;
@@ -63,6 +64,8 @@ public class EagleEyeController {
 
 	@RequestMapping(value="/adduser",method = RequestMethod.POST)
 	public ResponseEntity<User> addUser(@RequestBody User user) {
+		//To do change for hardcode value
+		user.setPassword("eagleeye");
 		userService.save(user);
 		logger.debug("Added User sucessfully:: " + user);
 		return new ResponseEntity<User>(user, HttpStatus.CREATED);
@@ -70,16 +73,22 @@ public class EagleEyeController {
 
 
 	@RequestMapping(value="/loginuser",method = RequestMethod.POST)
-	public ResponseEntity<Set<Menu>> loginUser(@RequestBody User user) {
+	public ResponseEntity<Object> loginUser(@RequestBody User user) {
 		logger.debug("User Name received : "+user.getUserName());
 		User userObj = userDao.getByUserName(user);
 		logger.debug("Added User sucessfully:: " + userObj);
 		if (userObj == null) {
-			logger.debug("User with name " + userObj.getUserName() + "  does not exists");
-			return new ResponseEntity<Set<Menu>>(HttpStatus.NO_CONTENT);
+			logger.debug("User with name " + user.getUserName() + "  does not exists");
+			ResponseEagle res = new ResponseEagle();
+			res.setResponseCode("100");
+			res.setResponseMessage("User name does not exist");
+			
+			
+			return new ResponseEntity<Object>(res,HttpStatus.OK);
 		}
 		logger.debug("Found User:: " + userObj);
-		return new ResponseEntity<Set<Menu>>(userObj.getRole().getMenu(), HttpStatus.OK);
+		
+		return new ResponseEntity<Object>(userObj.getRole().getMenu(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/getusers",method = RequestMethod.GET)

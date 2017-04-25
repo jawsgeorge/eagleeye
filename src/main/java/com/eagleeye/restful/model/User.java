@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "T_USER")
 public class User implements java.io.Serializable {
@@ -23,9 +25,18 @@ public class User implements java.io.Serializable {
 	@Column(name = "User_id", unique = true, nullable = false)
 	private Long user_id;
 	
-	@Column(name = "User_name", length = 50)
+	@Column(name = "User_name", unique = true,length = 50)
 	private String userName;
 	
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -67,7 +78,7 @@ public class User implements java.io.Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	@Column(name = "User_name", length = 50)
+	@Column(name = "password")
 	private String password;
 
 	

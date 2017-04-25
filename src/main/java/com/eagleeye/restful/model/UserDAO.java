@@ -29,10 +29,14 @@ public class UserDAO {
 	        "from User where user_name = :userName")
 	        .setParameter("userName", userName)
 	        .getSingleResult();*/
-			  Query query = entityManager.createQuery(
-				        "from User where user_name = :userName");
-			  query.setParameter("userName", userObj.getUserName());
-			 // query.setParameter("password", userObj.)
+			 
+			  
+			  user = (User) entityManager.createQuery(
+				        "from User where user_name = :userName and password = :password")
+				        .setParameter("userName", userObj.getUserName())
+				        .setParameter("password", userObj.getPassword())
+				        .getSingleResult();
+			  
 		  }
 		  catch(Exception e)
 		  {
