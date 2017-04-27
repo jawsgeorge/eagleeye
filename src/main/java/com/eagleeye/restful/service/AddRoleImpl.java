@@ -25,19 +25,17 @@ public class AddRoleImpl implements AddRole {
 
 	@Override
 	public Role getById(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		return roleRepository.findOne((Long) id);
 	}
 
 	@Override
 	public List getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return roleRepository.findAll();
 	}
 
 	@Override
 	public void delete(Serializable id) {
-		// TODO Auto-generated method stub
+		roleRepository.delete((Long) id);
 		
 	}
 	

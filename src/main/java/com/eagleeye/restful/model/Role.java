@@ -30,7 +30,7 @@ public class Role implements java.io.Serializable {
 	private String descrition;
 	
 	@ManyToMany(fetch=FetchType.EAGER)	
-	@JoinColumn(name="menu_id")
+	//@JoinColumn(name="menu_id")
 	private Set<Menu> menu;
 	
 	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)

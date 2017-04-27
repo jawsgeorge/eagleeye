@@ -24,19 +24,17 @@ public class AddMenuImpl implements AddMenu {
 
 	@Override
 	public Menu getById(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		return menuRepository.findOne((Long) id);
 	}
 
 	@Override
 	public List<Menu> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return menuRepository.findAll();
 	}
 
 	@Override
 	public void delete(Serializable id) {
-		// TODO Auto-generated method stub
+		menuRepository.delete((Long) id);
 
 	}
 

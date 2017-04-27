@@ -25,8 +25,8 @@ public class Menu implements java.io.Serializable {
 	private String menuName;
 	
 	
-	@ManyToMany(fetch=FetchType.LAZY)
-	private Set<Role> role;
+//	@ManyToMany(fetch=FetchType.LAZY)
+//	private Set<Role> role;
 
 	
 
@@ -40,60 +40,20 @@ public class Menu implements java.io.Serializable {
 
 	
 
-	@Override
-	public String toString() {
-		return "Menu [menu_id=" + menu_id + ", menuName=" + menuName + ", role=" + role + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((menuName == null) ? 0 : menuName.hashCode());
-		result = prime * result + menu_id;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Menu other = (Menu) obj;
-		if (menuName == null) {
-			if (other.menuName != null)
-				return false;
-		} else if (!menuName.equals(other.menuName))
-			return false;
-		if (menu_id != other.menu_id)
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		return true;
-	}
-
 	public String getMenuName() {
 		return menuName;
+	}
+
+	@Override
+	public String toString() {
+		return "Menu [menu_id=" + menu_id + ", menuName=" + menuName + "]";
 	}
 
 	public void setMenuName(String menuName) {
 		this.menuName = menuName;
 	}
 
-	public Set<Role> getRole() {
-		return role;
-	}
-
-	public void setRole(Set<Role> role) {
-		this.role = role;
-	}
+	
 
 	
 
