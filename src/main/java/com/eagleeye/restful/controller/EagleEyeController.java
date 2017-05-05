@@ -195,10 +195,12 @@ public class EagleEyeController {
 
 	// Role Controller
 	@RequestMapping(value="/addRole",method = RequestMethod.POST)
-	public ResponseEntity<Role> addRole(@RequestBody Role role) {
+	public ResponseEntity<List<Role>> addRole(@RequestBody Role role) {
 		roleService.save(role);
 		logger.debug("Added:: " + role);
-		return new ResponseEntity<Role>(role, HttpStatus.CREATED);
+		List<Role> roleList = roleService.getAll();
+		
+		return new ResponseEntity<List<Role>>(roleList, HttpStatus.OK);
 	}
 	@RequestMapping(value="/updateRole",method = RequestMethod.PUT)
 	public ResponseEntity<Void> updateRole(@RequestBody Role role) {
@@ -273,15 +275,18 @@ public class EagleEyeController {
 		
 	}
 	
-	@RequestMapping(value="/bookSlot",method=RequestMethod.GET)
-	public ResponseEntity< List<Ground>> bookSlot(){
-		 List<Ground> objs = new ArrayList() ;
-		
-		objs.addAll(groundDao.getLocationList());   
-		
-		 return new ResponseEntity<List<Ground>>(objs,HttpStatus.OK);
-		
-	}
+	//Method not used now.Hardcoded the list of cities in UI
+	
+//	@RequestMapping(value="/diplayAllCities",method=RequestMethod.GET)
+//	public ResponseEntity< List<Ground>> bookSlot(){
+//		 List<Ground> objs = new ArrayList() ;
+//		
+//		objs.addAll(groundDao.getLocationList());   
+//		
+//		 return new ResponseEntity<List<Ground>>(objs,HttpStatus.OK);
+//		
+//	}
+	
 	@RequestMapping(value="/getAllGrounds",method=RequestMethod.GET)
 	public ResponseEntity<List<Ground>> getAllGrounds(){
 		List<Ground> groundList=groundService.getAll();
