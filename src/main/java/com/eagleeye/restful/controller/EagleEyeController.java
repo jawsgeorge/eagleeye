@@ -20,18 +20,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eagleeye.restful.model.ConstructSlotAndGround;
 import com.eagleeye.restful.model.Employee;
 import com.eagleeye.restful.model.Ground;
 import com.eagleeye.restful.model.GroundDao;
 import com.eagleeye.restful.model.Menu;
 import com.eagleeye.restful.model.ResponseEagle;
 import com.eagleeye.restful.model.Role;
+import com.eagleeye.restful.model.Slot;
 import com.eagleeye.restful.service.AddMenu;
 import com.eagleeye.restful.service.AddRole;
+import com.eagleeye.restful.service.DAOService;
 import com.eagleeye.restful.service.EmployeeService;
 import com.eagleeye.restful.service.GroundService;
+import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
+import com.eagleeye.restful.web.SlotRequest;
 import com.eagleeye.restful.model.UserDAO;
 /**
  * 
@@ -61,6 +66,9 @@ public class EagleEyeController {
 	@Autowired
 	GroundService groundService;
 	
+	@Autowired
+	SlotService slotService;
+	
 	// Private fields
 	  
 	  // Wire the UserDao used inside this controller.
@@ -69,6 +77,9 @@ public class EagleEyeController {
 	  
 	 @Autowired
 	 GroundDao groundDao;
+	 
+	 @Autowired
+	 DAOService daoService;
 	
 	//User Controller
 
@@ -284,4 +295,29 @@ public class EagleEyeController {
 		
 	}
 	
+	@RequestMapping(value="/getSlotAndGround",method=RequestMethod.GET)
+	public ResponseEntity<ConstructSlotAndGround> getAllSlotAndGround(){
+		List<Ground> groundList=groundService.getAll();
+		if (groundList.isEmpty()) {
+			logger.debug("Ground does not exists");
+			//return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+		List<Slot> slotList=slotService.getAll();
+		ConstructSlotAndGround slotGround = new ConstructSlotAndGround();
+		slotGround.setGround(groundList);
+		slotGround.setSlot(slotList);
+		logger.debug("Found " + groundList.size() + " Grounds");
+		logger.debug(Arrays.toString(groundList.toArray()));
+		return new ResponseEntity<ConstructSlotAndGround>(slotGround,HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value="/getSlotBooking", method=RequestMethod.POST)
+	public ResponseEntity<List> getSlotBooking(@RequestBody SlotRequest slotRequest){
+		String date=slotRequest.getBookDate();
+		
+		List reponseList = daoService.getSlotBooking(date);
+		return new ResponseEntity<List>( reponseList,HttpStatus.OK);
+		
+	}	
 }
