@@ -36,15 +36,24 @@ public class GroundDao {
 		return  grounds;
 	}
 	
-	public List<Ground> getLocationList(){
-		
-		
-		 List<Ground> objs=null;
-		 objs= (List<Ground>) entityManager.createQuery("select distinct city, place from Ground Order by city").getResultList();
-	     System.out.println(objs.size()+"objs size");
-	     
-	    
-		 return objs;
-	}
+	//Method not used now. Hardcoded in UI.
+	
+//	public List<Ground> getLocationList(){
+//		
+//		
+//		 List objs=null;
+//		 objs=  entityManager.createQuery("select distinct city, place from Ground Order by city").getResultList();
+//	     for(int i =0;i<objs.size();i++){
+//	    	 //List gr = (List) ground;
+//	    	// List gr = objs.get(i).
+//	    	// System.out.println(gr.get(0));
+//	    	// System.out.println(gr.get(1));
+//	     }
+//		 
+//		 System.out.println("object list "+objs.toString());
+//	     
+//	    
+//		 return objs;
+//	}
 	
 	}
