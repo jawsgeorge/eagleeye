@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eagleeye.restful.model.ConstructSlotAndGround;
+import com.eagleeye.restful.model.CustomerBooking;
+import com.eagleeye.restful.model.CustomerPayment;
 import com.eagleeye.restful.model.Employee;
 import com.eagleeye.restful.model.Ground;
 import com.eagleeye.restful.model.GroundDao;
@@ -30,9 +32,11 @@ import com.eagleeye.restful.model.Role;
 import com.eagleeye.restful.model.Slot;
 import com.eagleeye.restful.service.AddMenu;
 import com.eagleeye.restful.service.AddRole;
+import com.eagleeye.restful.service.Customerservice;
 import com.eagleeye.restful.service.DAOService;
 import com.eagleeye.restful.service.EmployeeService;
 import com.eagleeye.restful.service.GroundService;
+import com.eagleeye.restful.service.PaymentService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
@@ -69,6 +73,12 @@ public class EagleEyeController {
 	@Autowired
 	SlotService slotService;
 	
+	@Autowired
+	Customerservice customerService;
+	
+	@Autowired
+	PaymentService paymentService;
+	
 	// Private fields
 	  
 	  // Wire the UserDao used inside this controller.
@@ -81,7 +91,7 @@ public class EagleEyeController {
 	 @Autowired
 	 DAOService daoService;
 	
-	//User Controller
+	//.............................User Controller.........................//
 
 	@RequestMapping(value="/adduser",method = RequestMethod.POST)
 	public ResponseEntity<List<User>> addUser(@RequestBody User user) {
@@ -133,7 +143,7 @@ public class EagleEyeController {
 		return new ResponseEntity<Set<Menu>>(u.getRole().getMenu(), HttpStatus.OK);
 	}
 	
-	//Menu controller
+	//.........................Menu controller.....................//
 	
 	@RequestMapping(value="/addMenu",method = RequestMethod.POST)
 	public ResponseEntity<Menu> addMenu(@RequestBody Menu menu) {
@@ -193,7 +203,8 @@ public class EagleEyeController {
 		}
 	}
 
-	// Role Controller
+	//............................. Role Controller...............//
+	
 	@RequestMapping(value="/addRole",method = RequestMethod.POST)
 	public ResponseEntity<List<Role>> addRole(@RequestBody Role role) {
 		roleService.save(role);
@@ -254,7 +265,7 @@ public class EagleEyeController {
 		}
 	}
 	
-	//Ground Controller
+	//...........................Ground Controller.....................//
 	
 	@RequestMapping(value="/addGround",method = RequestMethod.POST)
 	public ResponseEntity<List<Ground>> addGround(@RequestBody Ground ground) {
@@ -300,6 +311,8 @@ public class EagleEyeController {
 		
 	}
 	
+	//........................Slot Controller.....................//
+	
 	@RequestMapping(value="/getSlotAndGround",method=RequestMethod.GET)
 	public ResponseEntity<ConstructSlotAndGround> getAllSlotAndGround(){
 		List<Ground> groundList=groundService.getAll();
@@ -325,4 +338,33 @@ public class EagleEyeController {
 		return new ResponseEntity<List>( reponseList,HttpStatus.OK);
 		
 	}	
+	
+	//.........................Customer controller........................//
+	
+	@RequestMapping(value="/addCustomer",method=RequestMethod.POST)
+	public void addCustomer(@RequestBody CustomerBooking customer){
+		customerService.save(customer);
+		logger.debug("Added:: " + customer);
+		System.out.println(customer.getCustomer_id());
+		List<CustomerPayment> arr=customer.getCustomerPayment();
+		
+		for(CustomerPayment payment : arr){
+			payment.setCustomerBooking(customer);
+			paymentService.save(payment);
+		}
+		
+
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
