@@ -23,7 +23,7 @@ public class CustomerBooking implements java.io.Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int customer_id;
+	private int bookingReference;
 	
 	@Column(name="customerName",length=20)
 	private String customerName;
@@ -56,13 +56,7 @@ public class CustomerBooking implements java.io.Serializable {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public int getCustomer_id() {
-		return customer_id;
-	}
-
-	public void setCustomer_id(int customer_id) {
-		this.customer_id = customer_id;
-	}
+	
 
 	public String getCustomerName() {
 		return customerName;
@@ -106,12 +100,22 @@ public class CustomerBooking implements java.io.Serializable {
 		this.slotBooking = slotBooking;
 	}
 
+	public int getBookingReference() {
+		return bookingReference;
+	}
+
+	public void setBookingReference(int bookingReference) {
+		this.bookingReference = bookingReference;
+	}
+
 	@Override
 	public String toString() {
-		return "CustomerBooking [customer_id=" + customer_id + ", customerName=" + customerName + ", mobileNumber="
-				+ mobileNumber + ", Address=" + Address + ", amount=" + amount + ", slotBooking=" + slotBooking
-				+ ", customerPayment=" + customerPayment + "]";
+		return "CustomerBooking [bookingReference=" + bookingReference + ", customerName=" + customerName
+				+ ", mobileNumber=" + mobileNumber + ", Address=" + Address + ", amount=" + amount + ", slotBooking="
+				+ slotBooking + ", customerPayment=" + customerPayment + "]";
 	}
+
+	
 
 	
 }

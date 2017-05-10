@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.model.UserDAO;
+import com.eagleeye.restful.model.CustomerPayment;
 import com.eagleeye.restful.web.SlotResponse;
 
 @Repository
@@ -73,6 +74,33 @@ public class DAOService {
 		  }
 		  //return user;
 		  return responseList;
+	  }
+	  
+	  
+	  public void updateBookingStatus(int id){
+		  int result=0;
+		  int result1=0;
+		  String query0 = "INSERT INTO t_booking_status (booking_reference) VALUES ("+id+")";
+		  result1= entityManager.createNativeQuery(query0).executeUpdate();
+		  
+		  String query = "SELECT SUM(amount) AS PAID_AMOUNT FROM CustomerPayment where booking_reference="+id;
+		  long paidAmount = (long) entityManager.createQuery(query).getSingleResult();
+		 
+		  String query2 = "SELECT amount from CustomerBooking where bookingReference="+id;
+		  int totalAmount = (int) entityManager.createQuery(query2).getSingleResult();
+		 
+		   long pendingAmount = totalAmount-paidAmount;
+		   System.out.println("paid amount is"+paidAmount);
+		   System.out.println("total amount is"+totalAmount);
+		   System.out.println("pending amount is"+pendingAmount);
+		  if(pendingAmount==0){
+			  String query3 = "update BookingStatus set pendingTransaction=0,transactionStatus='cleared' where bookingReference="+id;
+			  result= entityManager.createQuery(query3).executeUpdate();
+			 System.out.println("result is "+result);
+		  }else{
+			  String query3 = "update BookingStatus set pendingTransaction="+pendingAmount+",transactionStatus='pending' where bookingReference="+id;
+			  result= entityManager.createQuery(query3).executeUpdate();
+		  }
 	  }
 	// Private fields
 	  

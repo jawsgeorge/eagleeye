@@ -33,7 +33,7 @@ public class CustomerPayment implements java.io.Serializable {
 	private String mode;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="customer_id")
+	@JoinColumn(name="bookingReference")
 	private CustomerBooking customerBooking;
 
 	public int getPayment_id() {

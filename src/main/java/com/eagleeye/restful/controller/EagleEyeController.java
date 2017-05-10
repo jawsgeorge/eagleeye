@@ -343,9 +343,11 @@ public class EagleEyeController {
 	
 	@RequestMapping(value="/addCustomer",method=RequestMethod.POST)
 	public void addCustomer(@RequestBody CustomerBooking customer){
+		
+		//customer.setCustomer_id(customer.getCustomer_id()+100);
 		customerService.save(customer);
 		logger.debug("Added:: " + customer);
-		System.out.println(customer.getCustomer_id());
+		
 		List<CustomerPayment> arr=customer.getCustomerPayment();
 		
 		for(CustomerPayment payment : arr){
@@ -353,9 +355,13 @@ public class EagleEyeController {
 			paymentService.save(payment);
 		}
 		
-
+		daoService.updateBookingStatus(customer.getBookingReference());
 		
 		
+	}
+	
+	
+	
 	}
 	
 	
@@ -365,6 +371,4 @@ public class EagleEyeController {
 	
 	
 	
-	
-	
-}
+
