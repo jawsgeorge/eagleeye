@@ -43,6 +43,28 @@ public class CustomerBooking implements java.io.Serializable {
 	
 	@OneToMany(mappedBy="customerBooking",fetch=FetchType.LAZY)
 	private List<CustomerPayment> customerPayment;
+	
+	@Column(name="transaction_status", length=10)
+	private String transactionStatus;
+	
+	@Column(name="pending_transaction", length=5)
+	private int pendingTransaction;
+
+	public String getTransactionStatus() {
+		return transactionStatus;
+	}
+
+	public void setTransactionStatus(String transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+
+	public int getPendingTransaction() {
+		return pendingTransaction;
+	}
+
+	public void setPendingTransaction(int pendingTransaction) {
+		this.pendingTransaction = pendingTransaction;
+	}
 
 	public List<CustomerPayment> getCustomerPayment() {
 		return customerPayment;
@@ -112,9 +134,11 @@ public class CustomerBooking implements java.io.Serializable {
 	public String toString() {
 		return "CustomerBooking [bookingReference=" + bookingReference + ", customerName=" + customerName
 				+ ", mobileNumber=" + mobileNumber + ", Address=" + Address + ", amount=" + amount + ", slotBooking="
-				+ slotBooking + ", customerPayment=" + customerPayment + "]";
+				+ slotBooking + ", customerPayment=" + customerPayment + ", transactionStatus=" + transactionStatus
+				+ ", pendingTransaction=" + pendingTransaction + "]";
 	}
 
+	
 	
 
 	

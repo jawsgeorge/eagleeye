@@ -77,31 +77,30 @@ public class DAOService {
 	  }
 	  
 	  
-	  public void updateBookingStatus(int id){
-		  int result=0;
-		  int result1=0;
-		  String query0 = "INSERT INTO t_booking_status (booking_reference) VALUES ("+id+")";
-		  result1= entityManager.createNativeQuery(query0).executeUpdate();
-		  
-		  String query = "SELECT SUM(amount) AS PAID_AMOUNT FROM CustomerPayment where booking_reference="+id;
-		  long paidAmount = (long) entityManager.createQuery(query).getSingleResult();
-		 
-		  String query2 = "SELECT amount from CustomerBooking where bookingReference="+id;
-		  int totalAmount = (int) entityManager.createQuery(query2).getSingleResult();
-		 
-		   long pendingAmount = totalAmount-paidAmount;
-		   System.out.println("paid amount is"+paidAmount);
-		   System.out.println("total amount is"+totalAmount);
-		   System.out.println("pending amount is"+pendingAmount);
-		  if(pendingAmount==0){
-			  String query3 = "update BookingStatus set pendingTransaction=0,transactionStatus='cleared' where bookingReference="+id;
-			  result= entityManager.createQuery(query3).executeUpdate();
-			 System.out.println("result is "+result);
-		  }else{
-			  String query3 = "update BookingStatus set pendingTransaction="+pendingAmount+",transactionStatus='pending' where bookingReference="+id;
-			  result= entityManager.createQuery(query3).executeUpdate();
+
+	  
+	  public void updateSlotStatus(List<Integer> ids){
+		  try{
+		  for(int bookid : ids){
+			  String query5 = "update SlotBooking set status='booked' where book_id="+bookid;
+			  int result=entityManager.createQuery(query5).executeUpdate();
+			  if(result==1){
+				  logger.debug("slot confirmed ");
+			  }else{
+				  logger.debug("slot is not booked successfully.");
+			  }
+			  
+			  
 		  }
+		  }catch(Exception e){
+			  e.printStackTrace();
+		  }
+		  
 	  }
+	  
+	  
+	  
+	  
 	// Private fields
 	  
 	  // An EntityManager will be automatically injected from entityManagerFactory

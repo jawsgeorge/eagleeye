@@ -276,15 +276,18 @@ public class EagleEyeController {
 	}
 	
 	
-	@RequestMapping(value="/getGroundByPlace", method=RequestMethod.POST)
-	public ResponseEntity<List<Ground>> getGroundByPlace(@RequestBody Ground ground){
-		String city=ground.getCity();
-		String place=ground.getPlace();
+	@RequestMapping(value="/getGroundByCity/{city}", method=RequestMethod.GET)
+	public ResponseEntity<List<Ground>> getGroundByPlace(@PathVariable("city") String city){
 		
-		List<Ground> grounds=groundDao.getGroundByCity(city, place);
+		
+		List<Ground> grounds=groundDao.getGroundByCity(city);
 		return new ResponseEntity<List<Ground>>(grounds, HttpStatus.OK);
 		
 	}
+	
+	
+	
+	
 	
 	//Method not used now.Hardcoded the list of cities in UI
 	
@@ -344,7 +347,31 @@ public class EagleEyeController {
 	@RequestMapping(value="/addCustomer",method=RequestMethod.POST)
 	public void addCustomer(@RequestBody CustomerBooking customer){
 		
-		//customer.setCustomer_id(customer.getCustomer_id()+100);
+	int paidAmount=0;	
+	int totalCharge=0;
+	int pendingAmount=0;
+	int playerSize=	customer.getCustomerPayment().size();
+	logger.debug("Total players added in the team is "+playerSize);
+	
+	for(int i =0;i<playerSize;i++){
+		paidAmount=paidAmount+customer.getCustomerPayment().get(i).getAmount();
+	}
+	logger.debug("Amount paid : "+paidAmount);
+	
+	totalCharge=customer.getAmount();
+	logger.debug("Total charge for booking  "+totalCharge);
+	
+	pendingAmount=totalCharge-paidAmount;
+	logger.debug("Pending payment : "+pendingAmount);
+	
+	logger.debug("updating transaction status.. ");
+	if(pendingAmount==0){
+		customer.setPendingTransaction(0);
+		customer.setTransactionStatus("cleared");
+	}else{
+		customer.setPendingTransaction(pendingAmount);
+		customer.setTransactionStatus("pending");
+	}
 		customerService.save(customer);
 		logger.debug("Added:: " + customer);
 		
@@ -355,7 +382,17 @@ public class EagleEyeController {
 			paymentService.save(payment);
 		}
 		
-		daoService.updateBookingStatus(customer.getBookingReference());
+		logger.debug("Retriving total booking count..");
+		List<Integer> bookedIds= new ArrayList();
+				
+				int totalBookings=customer.getSlotBooking().size();
+				
+				for(int i=0;i<totalBookings;i++){
+					bookedIds.add(customer.getSlotBooking().get(i).getBook_id());
+				}
+		
+	    logger.debug("confirming the slot for the bookings.. ");
+		daoService.updateSlotStatus(bookedIds);
 		
 		
 	}
