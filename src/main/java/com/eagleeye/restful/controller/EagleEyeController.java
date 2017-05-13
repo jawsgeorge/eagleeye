@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eagleeye.restful.model.BookedCustomer;
 import com.eagleeye.restful.model.ConstructSlotAndGround;
 import com.eagleeye.restful.model.CustomerBooking;
 import com.eagleeye.restful.model.CustomerPayment;
@@ -108,10 +109,11 @@ public class EagleEyeController {
 	public ResponseEntity<Object> loginUser(@RequestBody User user) {
 		logger.debug("User Name received : "+user.getUserName());
 		User userObj = userDao.getByUserName(user);
+		ResponseEagle res = new ResponseEagle();
 		logger.debug("Added User sucessfully:: " + userObj);
 		if (userObj == null) {
 			logger.debug("User with name " + user.getUserName() + "  does not exists");
-			ResponseEagle res = new ResponseEagle();
+			
 			res.setResponseCode("100");
 			res.setResponseMessage("User name does not exist");
 			
@@ -120,7 +122,11 @@ public class EagleEyeController {
 		}
 		logger.debug("Found User:: " + userObj);
 		
-		return new ResponseEntity<Object>(userObj.getRole().getMenu(), HttpStatus.OK);
+		Object obj=userObj.getRole().getMenu();
+		res.setObject(obj);
+		res.setResponseCode("200");
+		res.setResponseMessage("login success");
+		return new ResponseEntity<Object>(res, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/getusers",method = RequestMethod.GET)
@@ -287,20 +293,6 @@ public class EagleEyeController {
 	
 	
 	
-	
-	
-	//Method not used now.Hardcoded the list of cities in UI
-	
-//	@RequestMapping(value="/diplayAllCities",method=RequestMethod.GET)
-//	public ResponseEntity< List<Ground>> bookSlot(){
-//		 List<Ground> objs = new ArrayList() ;
-//		
-//		objs.addAll(groundDao.getLocationList());   
-//		
-//		 return new ResponseEntity<List<Ground>>(objs,HttpStatus.OK);
-//		
-//	}
-	
 	@RequestMapping(value="/getAllGrounds",method=RequestMethod.GET)
 	public ResponseEntity<List<Ground>> getAllGrounds(){
 		List<Ground> groundList=groundService.getAll();
@@ -398,6 +390,27 @@ public class EagleEyeController {
 	}
 	
 	
+	
+	
+	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
+	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") int id){
+		BookedCustomer bookedCustomer = new BookedCustomer();
+		List<Integer> bookIds = new ArrayList();
+		List<Integer> slotIds = new ArrayList();
+		CustomerBooking customer = customerService.getById(id);
+		if (customer == null) {
+			logger.debug("Customer with id " + id + "  does not exists");
+			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
+		}
+		int totalBookings=customer.getSlotBooking().size();
+		for(int i=0;i<totalBookings;i++){
+			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
+		}
+		for(int i:bookIds){
+			slotService.getById(i);
+		}
+		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
+	}
 	
 	}
 	
