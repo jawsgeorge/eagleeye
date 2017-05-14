@@ -36,12 +36,12 @@ public class GroundDao {
 		return  grounds;
 	}
 	
-	public List<Ground> getGroundByCity(String city){
-		List<Ground> grounds = null;
+	public List<MasterGround> getGroundByCity(String city){
+		List<MasterGround> grounds = null;
 		
 		try{
 		grounds  =   entityManager.createQuery(
-		        "from Ground where city = :city")
+		        "from MasterGround where city = :city")
 		        .setParameter("city", city)
 		        .getResultList();
 		

@@ -27,6 +27,7 @@ import com.eagleeye.restful.model.CustomerPayment;
 import com.eagleeye.restful.model.Employee;
 import com.eagleeye.restful.model.Ground;
 import com.eagleeye.restful.model.GroundDao;
+import com.eagleeye.restful.model.MasterGround;
 import com.eagleeye.restful.model.Menu;
 import com.eagleeye.restful.model.ResponseEagle;
 import com.eagleeye.restful.model.Role;
@@ -37,6 +38,7 @@ import com.eagleeye.restful.service.Customerservice;
 import com.eagleeye.restful.service.DAOService;
 import com.eagleeye.restful.service.EmployeeService;
 import com.eagleeye.restful.service.GroundService;
+import com.eagleeye.restful.service.MasterGroundService;
 import com.eagleeye.restful.service.PaymentService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
@@ -79,6 +81,9 @@ public class EagleEyeController {
 	
 	@Autowired
 	PaymentService paymentService;
+	
+	@Autowired
+	MasterGroundService masterGroundService;
 	
 	// Private fields
 	  
@@ -282,14 +287,7 @@ public class EagleEyeController {
 	}
 	
 	
-	@RequestMapping(value="/getGroundByCity/{city}", method=RequestMethod.GET)
-	public ResponseEntity<List<Ground>> getGroundByPlace(@PathVariable("city") String city){
-		
-		
-		List<Ground> grounds=groundDao.getGroundByCity(city);
-		return new ResponseEntity<List<Ground>>(grounds, HttpStatus.OK);
-		
-	}
+	
 	
 	
 	
@@ -305,6 +303,42 @@ public class EagleEyeController {
 		return new ResponseEntity<List<Ground>>(groundList,HttpStatus.OK);
 		
 	}
+	
+	//........................MasterGroundController..............//
+	
+	@RequestMapping(value="/addMasterGround",method = RequestMethod.POST)
+	public ResponseEntity<List<MasterGround>> addMasterGround(@RequestBody MasterGround masterGround) {
+		masterGroundService.save(masterGround);
+		logger.debug("Added:: " + masterGround);
+		Set<Ground> grounds=masterGround.getGrounds();
+		for(Ground subGround : grounds){
+			subGround.setMasterGround(masterGround);
+			groundService.save(subGround);
+		}
+		List<MasterGround> masterGroundList = masterGroundService.getAll();
+		return new ResponseEntity<List<MasterGround>>(masterGroundList, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value="/getGroundByCity/{city}", method=RequestMethod.GET)
+	public ResponseEntity<List<MasterGround>> getGroundByPlace(@PathVariable("city") String city){
+		
+		List<Object> objArr = new ArrayList();
+		List<MasterGround> grounds=groundDao.getGroundByCity(city);
+		
+		
+		return new ResponseEntity<List<MasterGround>>(grounds, HttpStatus.OK);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//........................Slot Controller.....................//
 	
@@ -392,25 +426,25 @@ public class EagleEyeController {
 	
 	
 	
-	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
-	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") int id){
-		BookedCustomer bookedCustomer = new BookedCustomer();
-		List<Integer> bookIds = new ArrayList();
-		List<Integer> slotIds = new ArrayList();
-		CustomerBooking customer = customerService.getById(id);
-		if (customer == null) {
-			logger.debug("Customer with id " + id + "  does not exists");
-			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
-		}
-		int totalBookings=customer.getSlotBooking().size();
-		for(int i=0;i<totalBookings;i++){
-			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
-		}
-		for(int i:bookIds){
-			slotService.getById(i);
-		}
-		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
-	}
+//	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
+//	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") int id){
+//		BookedCustomer bookedCustomer = new BookedCustomer();
+//		List<Integer> bookIds = new ArrayList();
+//		List<Integer> slotIds = new ArrayList();
+//		CustomerBooking customer = customerService.getById(id);
+//		if (customer == null) {
+//			logger.debug("Customer with id " + id + "  does not exists");
+//			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
+//		}
+//		int totalBookings=customer.getSlotBooking().size();
+//		for(int i=0;i<totalBookings;i++){
+//			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
+//		}
+//		for(int i:bookIds){
+//			slotService.getById(i);
+//		}
+//		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
+//	}
 	
 	}
 	
