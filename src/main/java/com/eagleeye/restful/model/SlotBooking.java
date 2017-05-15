@@ -4,9 +4,12 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -73,4 +76,16 @@ public class SlotBooking implements java.io.Serializable {
 	
 	@Column(name="status", length=20)
 	private String status;
+	
+	@ManyToOne(fetch=FetchType.LAZY)	
+	@JoinColumn(name="slot_id")
+	private Slot slot;
+
+	public Slot getSlot() {
+		return slot;
+	}
+
+	public void setSlot(Slot slot) {
+		this.slot = slot;
+	}
 }
