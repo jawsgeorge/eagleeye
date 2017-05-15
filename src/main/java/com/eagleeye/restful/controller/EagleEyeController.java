@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eagleeye.restful.model.BookedCustomer;
+//import com.eagleeye.restful.model.BookedCustomer;
 import com.eagleeye.restful.model.ConstructSlotAndGround;
 import com.eagleeye.restful.model.CustomerBooking;
 import com.eagleeye.restful.model.CustomerPayment;
@@ -440,12 +440,21 @@ public class EagleEyeController {
 //		for(int i=0;i<totalBookings;i++){
 //			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
 //		}
-//		for(int i:bookIds){
-//			slotService.getById(i);
+//		
+//		List<Object> arr=daoService.getSlotIds(bookIds);
+//		int objSize=arr.size();
+//		List<Slot> slots = new ArrayList();
+//		for(int i=0;i<objSize;i++){
+//			
+//			slots.add((slotService.getById((Integer)arr.get(i))));
 //		}
+//		
+//		bookedCustomer.setBookingReference(id);
+//		bookedCustomer.setDateOfBooking(customer.getSlotBooking().get(0).getDate());
+//		
 //		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
 //	}
-	
+//	
 	}
 	
 	
