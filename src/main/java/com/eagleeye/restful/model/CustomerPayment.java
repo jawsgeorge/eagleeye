@@ -11,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "T_CUSTOMER_PAYMENT")
 public class CustomerPayment implements java.io.Serializable {
@@ -32,8 +34,10 @@ public class CustomerPayment implements java.io.Serializable {
 	@Column(name="mode",length=10)
 	private String mode;
 	
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="bookingReference")
+	@JsonIgnore
 	private CustomerBooking customerBooking;
 
 	public int getPayment_id() {
