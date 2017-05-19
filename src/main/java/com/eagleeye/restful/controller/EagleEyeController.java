@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-//import com.eagleeye.restful.model.BookedCustomer;
+import com.eagleeye.restful.model.BookedCustomer;
 import com.eagleeye.restful.model.ConstructSlotAndGround;
 import com.eagleeye.restful.model.CustomerBooking;
 import com.eagleeye.restful.model.CustomerPayment;
@@ -32,6 +32,7 @@ import com.eagleeye.restful.model.Menu;
 import com.eagleeye.restful.model.ResponseEagle;
 import com.eagleeye.restful.model.Role;
 import com.eagleeye.restful.model.Slot;
+import com.eagleeye.restful.model.SlotBooking;
 import com.eagleeye.restful.service.AddMenu;
 import com.eagleeye.restful.service.AddRole;
 import com.eagleeye.restful.service.Customerservice;
@@ -40,6 +41,7 @@ import com.eagleeye.restful.service.EmployeeService;
 import com.eagleeye.restful.service.GroundService;
 import com.eagleeye.restful.service.MasterGroundService;
 import com.eagleeye.restful.service.PaymentService;
+import com.eagleeye.restful.service.SlotBookingService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
@@ -85,6 +87,9 @@ public class EagleEyeController {
 	
 	@Autowired
 	MasterGroundService masterGroundService;
+	
+	@Autowired
+	SlotBookingService slotBookingService;
 	
 	// Private fields
 	  
@@ -427,35 +432,42 @@ public class EagleEyeController {
 	
 	
 	
-//	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
-//	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") int id){
-//		BookedCustomer bookedCustomer = new BookedCustomer();
-//		List<Integer> bookIds = new ArrayList();
-//		List<Integer> slotIds = new ArrayList();
-//		CustomerBooking customer = customerService.getById(id);
-//		if (customer == null) {
-//			logger.debug("Customer with id " + id + "  does not exists");
-//			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
-//		}
-//		int totalBookings=customer.getSlotBooking().size();
-//		for(int i=0;i<totalBookings;i++){
-//			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
-//		}
-//		
-//		List<Object> arr=daoService.getSlotIds(bookIds);
-//		int objSize=arr.size();
-//		List<Slot> slots = new ArrayList();
-//		for(int i=0;i<objSize;i++){
-//			
-//			slots.add((slotService.getById((Integer)arr.get(i))));
-//		}
-//		
-//		bookedCustomer.setBookingReference(id);
-//		bookedCustomer.setDateOfBooking(customer.getSlotBooking().get(0).getDate());
-//		
-//		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
-//	}
-//	
+	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
+	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") Long id){
+		
+		BookedCustomer bookedCustomer = new BookedCustomer();
+		
+		List<Slot> slots = new ArrayList();
+		
+		CustomerBooking customer = customerService.getById(id);
+		if (customer == null) {
+			logger.debug("Customer with id " + id + "  does not exists");
+			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
+		}
+		int totalBookings=customer.getSlotBooking().size();
+		List<Integer> bookIds = new ArrayList();
+		for(int i=0;i<totalBookings;i++){
+			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
+		}
+  
+		
+		List<SlotBooking> bookings = new ArrayList();
+		for(int i=0;i<bookIds.size();i++){
+		bookings.add(slotBookingService.getById(bookIds.get(i)));
+		}
+			
+		
+		bookedCustomer.setBookingReference(id);
+		bookedCustomer.setName(customer.getCustomerName());
+		bookedCustomer.setMobileNo(customer.getMobileNumber());
+		bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
+		bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
+		bookedCustomer.setBookings(bookings);
+		
+		
+		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
+	}
+	
 	}
 	
 	
