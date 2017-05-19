@@ -377,7 +377,7 @@ public class EagleEyeController {
 	//.........................Customer controller........................//
 	
 	@RequestMapping(value="/addCustomer",method=RequestMethod.POST)
-	public void addCustomer(@RequestBody CustomerBooking customer){
+	public ResponseEntity<Void> addCustomer(@RequestBody CustomerBooking customer){
 		
 	int paidAmount=0;	
 	int totalCharge=0;
@@ -426,7 +426,7 @@ public class EagleEyeController {
 	    logger.debug("confirming the slot for the bookings.. ");
 		daoService.updateSlotStatus(bookedIds);
 		
-		
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	
