@@ -43,6 +43,7 @@ import com.eagleeye.restful.service.PaymentService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
+import com.eagleeye.restful.web.SlotFinalRespnse;
 import com.eagleeye.restful.web.SlotRequest;
 import com.eagleeye.restful.model.UserDAO;
 /**
@@ -360,11 +361,11 @@ public class EagleEyeController {
 	}
 	
 	@RequestMapping(value="/getSlotBooking", method=RequestMethod.POST)
-	public ResponseEntity<List> getSlotBooking(@RequestBody SlotRequest slotRequest){
-		String date=slotRequest.getBookDate();
+	public ResponseEntity<SlotFinalRespnse> getSlotBooking(@RequestBody SlotRequest slotRequest){
+		//String date=slotRequest.getBookDate();
 		
-		List reponseList = daoService.getSlotBooking(date);
-		return new ResponseEntity<List>( reponseList,HttpStatus.OK);
+		SlotFinalRespnse finalResponse = daoService.getSlotBooking(slotRequest);
+		return new ResponseEntity<SlotFinalRespnse>( finalResponse,HttpStatus.OK);
 		
 	}	
 	

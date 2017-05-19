@@ -27,6 +27,13 @@ public class SlotRequest implements java.io.Serializable {
 		this.groundName = groundName;
 	}
 	private long groundId;
+	private long masterGroundId;
+	public long getMasterGroundId() {
+		return masterGroundId;
+	}
+	public void setMasterGroundId(long masterGroundId) {
+		this.masterGroundId = masterGroundId;
+	}
 	private String groundName;
 	
 }

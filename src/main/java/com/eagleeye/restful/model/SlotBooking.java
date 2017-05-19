@@ -41,13 +41,7 @@ public class SlotBooking implements java.io.Serializable {
 		this.date = date;
 	}
 
-	public int getSlotId() {
-		return slotId;
-	}
-
-	public void setSlotId(int slotId) {
-		this.slotId = slotId;
-	}
+	
 
 	public int getGroundId() {
 		return groundId;
@@ -68,8 +62,7 @@ public class SlotBooking implements java.io.Serializable {
 	@Column(name="date")
 	private Date date;
 	
-	@Column(name="slot_id")
-	private int slotId;
+	
 	
 	@Column(name="ground_id")
 	private int groundId;

@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.model.UserDAO;
 import com.eagleeye.restful.model.CustomerPayment;
+import com.eagleeye.restful.web.SlotDetailsResponse;
+import com.eagleeye.restful.web.SlotFinalRespnse;
+import com.eagleeye.restful.web.SlotRequest;
 import com.eagleeye.restful.web.SlotResponse;
 
 @Repository
@@ -24,47 +27,68 @@ public class DAOService {
 	/**
 	   * Return the user having the passed username.
 	   */
-	  public List getSlotBooking(String date) {
-		 logger.debug("received the value getSlotBooking : "+date);
+	  public SlotFinalRespnse getSlotBooking(SlotRequest slotRequest) {
+		 logger.debug("received the value getSlotBooking : "+slotRequest.getBookDate());
 		  User user = null;
-		  List responseList=null;
+		  SlotFinalRespnse responseFinal = new SlotFinalRespnse();
 		  try
 		  {
 	    /*user = (User) entityManager.createQuery(
 	        "from User where user_name = :userName")
 	        .setParameter("userName", userName)
 	        .getSingleResult();*/
+			  
+			  String groundQuery =" select mast.master_ground_id,mast.master_ground_name, "
+					  +" ground.ground_id,ground.ground_name,ground.size,ground.type from eagleeye.t_master_ground mast,eagleeye.t_ground ground "
+					  +"where mast.master_ground_id="+slotRequest.getMasterGroundId()+" and mast.master_ground_id=ground.master_ground_id";
 			 
-			  String query =" select slot.slot_id,slot.startTime,slot.endTime,booking.status,booking.date, "+
-			  " ground.ground_id,ground.groundName from Slot as slot, SlotBooking as booking, "+
-		      " Ground as ground where slot.slot_id=booking.slotId and "+
-			  " booking.groundId = ground.ground_id and booking.date=STR_TO_DATE('"+date+"','%Y-%m-%d')";
-			  logger.debug(" Query is : "+query);
 			  
-			  
-			  List<Object[]> rows =  entityManager.createQuery(query)
+			  List<Object[]> rowsMaster =  entityManager.createNativeQuery(groundQuery)
 				       			        .getResultList();
-			  logger.debug("received the value rows : "+rows.size());
-			  responseList = new ArrayList();
-			  for (Object[] row : rows) {
-				  SlotResponse slotResponse = new SlotResponse();
-				  logger.debug("value is slot id : "+row[0]);
-				  slotResponse.setSlotId((int)row[0]);
-				  logger.debug("value is start time : "+row[1]);
-				  slotResponse.setStartTime((String)row[1]);
-				  logger.debug("value is end time : "+row[2]); 
-				  slotResponse.setEndTime((String)row[2]);
-				  logger.debug("value is status : "+row[3]); 
-				  slotResponse.setStatus((String)row[3]);
-				  logger.debug("value is booking date : "+row[4]); 
-				  slotResponse.setBookingDate((Date)row[4]); 
-				  logger.debug("value is ground id : "+row[5]); 
-				  slotResponse.setGroundId((int)row[5]);
-				  logger.debug("value is ground name : "+row[6]); 
-				  slotResponse.setGroundName((String)row[6]);
-				  responseList.add(slotResponse);
+			  List responseList=new ArrayList();
+			  for (Object[] rowMaster : rowsMaster) {
+				 
+				  SlotDetailsResponse slotDetailsResponse = new SlotDetailsResponse();
+				  slotDetailsResponse.setMasterGroundId((int)rowMaster[0]);
+				  slotDetailsResponse.setGroundId((int)rowMaster[2]);
+				  slotDetailsResponse.setGroundConfigCode((String)rowMaster[4]);
+				  slotDetailsResponse.setGroundData((String)rowMaster[5]);
+
+				  String query =" select slot.slot_id,slot.start_time,slot.end_time,booking.status,booking.date, "+
+				  " ground.ground_id,ground.ground_name from eagleeye.t_slot as slot, eagleeye.t_slot_booking as booking, "+
+			      " eagleeye.t_ground as ground where slot.slot_id=booking.slot_id and booking.ground_id = ground.ground_id  "+
+				  " and booking.date=STR_TO_DATE('"+slotRequest.getBookDate()+"','%Y-%m-%d') and booking.ground_id="+slotDetailsResponse.getGroundId();
+			      
+				  logger.debug(" Query is : "+query);
+				  
+						  List<Object[]> rows =  entityManager.createNativeQuery(query)
+							       			        .getResultList();
+						  logger.debug("received the value rows : "+rows.size());
+						  List slotList = new ArrayList();
+						  for (Object[] row : rows) {
+							  SlotResponse slotResponse = new SlotResponse();
+							  logger.debug("value is slot id : "+row[0]);
+							  slotResponse.setSlotId((int)row[0]);	
+							  logger.debug("value is start time : "+row[1]);
+							  slotResponse.setStartTime((String)row[1]);
+							  logger.debug("value is end time : "+row[2]); 
+							  slotResponse.setEndTime((String)row[2]);
+							  logger.debug("value is status : "+row[3]); 
+							  slotResponse.setStatus((String)row[3]);
+							  logger.debug("value is booking date : "+row[4]); 
+							  slotResponse.setBookingDate((Date)row[4]); 
+							  logger.debug("value is ground id : "+row[5]); 
+							  slotResponse.setGroundId((int)row[5]);
+							  logger.debug("value is ground name : "+row[6]); 
+							  slotResponse.setGroundName((String)row[6]);
+							  slotList.add(slotResponse);
+						  }
+						  slotDetailsResponse.setSlots(slotList);
+						  responseList.add(slotDetailsResponse);
 			  }
-			 return responseList;
+			  
+			  responseFinal.setSlotDetails(responseList);
+			 return responseFinal;
 			  
 		  }
 		  catch(Exception e)
@@ -73,7 +97,7 @@ public class DAOService {
 			  
 		  }
 		  //return user;
-		  return responseList;
+		  return responseFinal;
 	  }
 	  
 	  
