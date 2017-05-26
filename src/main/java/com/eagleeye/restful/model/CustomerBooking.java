@@ -21,6 +21,11 @@ import javax.persistence.Table;
 @Table(name = "T_customer_Booking")
 public class CustomerBooking implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1529346208416719886L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bookingReference;

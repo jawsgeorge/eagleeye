@@ -16,6 +16,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "T_GROUND")
 public class Ground implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5280363549630982085L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ground_id;

@@ -15,6 +15,11 @@ import javax.persistence.Table;
 @Table(name = "T_master_ground")
 public class MasterGround implements java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7372761696758889063L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "master_ground_id", unique = true, nullable = false)

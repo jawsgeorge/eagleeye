@@ -48,9 +48,12 @@ import com.eagleeye.restful.service.SlotBookingService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
+import com.eagleeye.restful.web.MasterGroundFinal;
+import com.eagleeye.restful.web.RoleFinal;
 import com.eagleeye.restful.web.SlotFinalRequest;
 import com.eagleeye.restful.web.SlotFinalRespnse;
 import com.eagleeye.restful.web.SlotRequest;
+import com.eagleeye.restful.web.UserFinal;
 import com.eagleeye.restful.model.UserDAO;
 /**
  * 
@@ -110,13 +113,14 @@ public class EagleEyeController {
 	//.............................User Controller.........................//
 
 	@RequestMapping(value="/adduser",method = RequestMethod.POST)
-	public ResponseEntity<List<User>> addUser(@RequestBody User user) {
+	public ResponseEntity<UserFinal> addUser(@RequestBody User user) {
 		//To do change for hardcode value
 		user.setPassword("eagleeye");
 		userService.save(user);
 		logger.debug("Added User sucessfully:: " + user);
-		List<User> userList = userService.getAll();
-		return new ResponseEntity<List<User>>(userList, HttpStatus.CREATED);
+		UserFinal userList = new UserFinal();
+		userList.setUserList(userService.getAll());
+		return new ResponseEntity<UserFinal>(userList, HttpStatus.CREATED);
 	}
 
 
@@ -227,12 +231,14 @@ public class EagleEyeController {
 	//............................. Role Controller...............//
 	
 	@RequestMapping(value="/addRole",method = RequestMethod.POST)
-	public ResponseEntity<List<Role>> addRole(@RequestBody Role role) {
+	public ResponseEntity<RoleFinal> addRole(@RequestBody Role role) {
+		RoleFinal roleList = new RoleFinal();
 		roleService.save(role);
 		logger.debug("Added:: " + role);
-		List<Role> roleList = roleService.getAll();
+		 roleList.setRoleList(roleService.getAll());
 		
-		return new ResponseEntity<List<Role>>(roleList, HttpStatus.OK);
+		
+		return new ResponseEntity<RoleFinal>(roleList, HttpStatus.OK);
 	}
 	@RequestMapping(value="/updateRole",method = RequestMethod.PUT)
 	public ResponseEntity<Void> updateRole(@RequestBody Role role) {
@@ -317,7 +323,7 @@ public class EagleEyeController {
 	//........................MasterGroundController..............//
 	
 	@RequestMapping(value="/addMasterGround",method = RequestMethod.POST)
-	public ResponseEntity<List<MasterGround>> addMasterGround(@RequestBody MasterGround masterGround) {
+	public ResponseEntity<MasterGroundFinal> addMasterGround(@RequestBody MasterGround masterGround) {
 		masterGroundService.save(masterGround);
 		logger.debug("Added:: " + masterGround);
 		Set<Ground> grounds=masterGround.getGrounds();
@@ -325,18 +331,23 @@ public class EagleEyeController {
 			subGround.setMasterGround(masterGround);
 			groundService.save(subGround);
 		}
-		List<MasterGround> masterGroundList = masterGroundService.getAll();
-		return new ResponseEntity<List<MasterGround>>(masterGroundList, HttpStatus.CREATED);
+		MasterGroundFinal masterGroundList = new MasterGroundFinal();
+		
+		
+		 masterGroundList.setMastergroundList(masterGroundService.getAll());
+		return new ResponseEntity<MasterGroundFinal>(masterGroundList, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value="/getGroundByCity/{city}", method=RequestMethod.GET)
-	public ResponseEntity<List<MasterGround>> getGroundByPlace(@PathVariable("city") String city){
-		
-		List<Object> objArr = new ArrayList();
-		List<MasterGround> grounds=groundDao.getGroundByCity(city);
+	public ResponseEntity<MasterGroundFinal> getGroundByPlace(@PathVariable("city") String city){
 		
 		
-		return new ResponseEntity<List<MasterGround>>(grounds, HttpStatus.OK);
+		MasterGroundFinal masterGroundList = new MasterGroundFinal();
+		
+		 masterGroundList.setMastergroundList(groundDao.getGroundByCity(city));
+		
+		
+		return new ResponseEntity<MasterGroundFinal>(masterGroundList, HttpStatus.OK);
 		
 	}
 	

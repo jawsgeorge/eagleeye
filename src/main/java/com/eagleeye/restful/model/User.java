@@ -20,6 +20,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "T_USER")
 public class User implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1910216402809972403L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "User_id", unique = true, nullable = false)

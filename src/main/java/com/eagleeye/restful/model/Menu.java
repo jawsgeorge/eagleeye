@@ -17,6 +17,11 @@ import javax.persistence.Table;
 @Table(name = "T_MENU")
 public class Menu implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8632227091341739529L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int menu_id;

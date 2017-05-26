@@ -18,6 +18,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class CustomerPayment implements java.io.Serializable {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 653602222957056174L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int payment_id;

@@ -20,6 +20,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "T_ROLE")
 public class Role implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2976721723605811704L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Role_id", unique = true, nullable = false)
