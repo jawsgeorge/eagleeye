@@ -436,18 +436,31 @@ public class EagleEyeController {
 	
 	
 	
-	@RequestMapping(value="/getBookedCustomer/{id}",method=RequestMethod.GET)
-	public ResponseEntity<BookedCustomer> getBookedCustomer(@PathVariable("id") Long id){
-		
+	@RequestMapping(value="/getBookedCustomer",method=RequestMethod.POST)
+	public ResponseEntity<BookedCustomer> getBookedCustomer(@RequestBody CustomerBooking customerDetails){
+		int bookingRef=0;
 		BookedCustomer bookedCustomer = new BookedCustomer();
-		
+		CustomerBooking customer=new CustomerBooking();
 		List<Slot> slots = new ArrayList();
 		
-		CustomerBooking customer = customerService.getById(id);
-		if (customer == null) {
-			logger.debug("Customer with id " + id + "  does not exists");
-			return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
+		if(customerDetails.getBookingReference()!=0){
+			bookingRef=customerDetails.getBookingReference();
+			logger.debug("Customer booking id fetched" + bookingRef );
+			 
 		}
+		
+		if(customerDetails.getMobileNumber()!=0){
+			bookingRef=daoService.getCustomerByMobile(customer.getMobileNumber());
+			logger.debug("Customer booking id fetched" + bookingRef );
+		}
+		
+		customer = customerService.getById(bookingRef);
+		logger.debug("Customer object fetched" );
+		 if (customer == null) {
+				logger.debug("Customer with id " + bookingRef + "  does not exists");
+				return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
+			}
+		
 		int totalBookings=customer.getSlotBooking().size();
 		List<Integer> bookIds = new ArrayList();
 		for(int i=0;i<totalBookings;i++){
@@ -456,17 +469,23 @@ public class EagleEyeController {
   
 		
 		List<SlotBooking> bookings = new ArrayList();
+		logger.debug("inside slot booking loop" );
 		for(int i=0;i<bookIds.size();i++){
 		bookings.add(slotBookingService.getById(bookIds.get(i)));
 		}
+		logger.debug("after slot booking loop" );
+		for(int j=0;j<bookings.size();j++){
+			//slots.add(bookings.get(j).getSlot());
+		}
 			
-		
-		bookedCustomer.setBookingReference(id);
+		logger.debug("after slot  loop" );
+		bookedCustomer.setBookingReference(bookingRef);
 		bookedCustomer.setName(customer.getCustomerName());
 		bookedCustomer.setMobileNo(customer.getMobileNumber());
 		bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
 		bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
 		bookedCustomer.setBookings(bookings);
+		//bookedCustomer.setSlots(slots);
 		
 		
 		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
@@ -493,7 +512,7 @@ public class EagleEyeController {
 			//slotBooking.setDate(sqlStartDate);
 			//slotBooking.setGroundId(slotRequest.getGroundId());
 			//slotBooking.setSlotId(slotRequest.getSlotId());
-			slotBooking.setStatus("Parital");
+			slotBooking.setStatus("Partial");
 			slotBookingService.save(slotBooking);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);

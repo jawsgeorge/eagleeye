@@ -122,7 +122,11 @@ public class DAOService {
 		  
 	  }
 	  
-	  
+	  public int getCustomerByMobile(long mobileNo){
+		  String query6 = "select bookingReference from CustomerBooking where mobileNumber="+mobileNo;
+		  int bookRef= (int) entityManager.createQuery(query6).getSingleResult();
+		  return bookRef;
+	  }
 	  
 	  
 	// Private fields
