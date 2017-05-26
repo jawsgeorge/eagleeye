@@ -1,5 +1,8 @@
 package com.eagleeye.restful.controller;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ import com.eagleeye.restful.service.SlotBookingService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
+import com.eagleeye.restful.web.SlotFinalRequest;
 import com.eagleeye.restful.web.SlotFinalRespnse;
 import com.eagleeye.restful.web.SlotRequest;
 import com.eagleeye.restful.model.UserDAO;
@@ -468,6 +472,32 @@ public class EagleEyeController {
 		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/bookSlots",method=RequestMethod.POST)
+	public ResponseEntity<Void> bookSlots(@RequestBody SlotFinalRequest slotFinalRequest){
+		logger.debug("Book Slots Entered..");
+		List<SlotBooking> bookSlots=slotFinalRequest.getBookslots();
+		for(SlotBooking slotBooking : bookSlots){
+			//SlotBooking slotBooking = new SlotBooking();
+			
+			/*SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date date=null;
+			try {
+				//date = sdf1.parse(slotBooking.getDate());
+				date = slotBooking.getDate();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			java.sql.Date sqlStartDate = new Date(date.getTime()); 
+			logger.debug("sqlStartDate .."+sqlStartDate);*/
+			//slotBooking.setDate(sqlStartDate);
+			//slotBooking.setGroundId(slotRequest.getGroundId());
+			//slotBooking.setSlotId(slotRequest.getSlotId());
+			slotBooking.setStatus("Parital");
+			slotBookingService.save(slotBooking);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 	}
 	
 	

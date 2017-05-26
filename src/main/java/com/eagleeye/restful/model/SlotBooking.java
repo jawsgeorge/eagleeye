@@ -69,16 +69,14 @@ public class SlotBooking implements java.io.Serializable {
 	
 	@Column(name="status", length=20)
 	private String status;
-	
-	@ManyToOne(fetch=FetchType.LAZY)	
-	@JoinColumn(name="slot_id")
-	private Slot slot;
+	@Column(name="slot_id")
+	private int slotId;
 
-	public Slot getSlot() {
-		return slot;
+	public int getSlotId() {
+		return slotId;
 	}
 
-	public void setSlot(Slot slot) {
-		this.slot = slot;
+	public void setSlotId(int slotId) {
+		this.slotId = slotId;
 	}
 }

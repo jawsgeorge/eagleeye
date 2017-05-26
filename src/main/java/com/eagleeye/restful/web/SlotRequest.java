@@ -14,19 +14,20 @@ public class SlotRequest implements java.io.Serializable {
 	public void setBookDate(String bookDate) {
 		this.bookDate = bookDate;
 	}
-	public long getGroundId() {
-		return groundId;
-	}
-	public void setGroundId(long groundId) {
-		this.groundId = groundId;
-	}
+	
 	public String getGroundName() {
 		return groundName;
 	}
 	public void setGroundName(String groundName) {
 		this.groundName = groundName;
 	}
-	private long groundId;
+	private int groundId;
+	public int getGroundId() {
+		return groundId;
+	}
+	public void setGroundId(int groundId) {
+		this.groundId = groundId;
+	}
 	private long masterGroundId;
 	public long getMasterGroundId() {
 		return masterGroundId;
@@ -35,5 +36,13 @@ public class SlotRequest implements java.io.Serializable {
 		this.masterGroundId = masterGroundId;
 	}
 	private String groundName;
+	
+	private int slotId;
+	public int getSlotId() {
+		return slotId;
+	}
+	public void setSlotId(int slotId) {
+		this.slotId = slotId;
+	}
 	
 }

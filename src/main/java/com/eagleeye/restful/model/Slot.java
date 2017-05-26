@@ -54,7 +54,7 @@ public class Slot implements java.io.Serializable {
 	@Column(name="end_time", length=20)
 	private String endTime;
 	
-	@OneToMany(mappedBy="slot",fetch=FetchType.LAZY)
+	/*@OneToMany(mappedBy="slot",fetch=FetchType.LAZY)
 	private Set<SlotBooking> slotBooking;
 
 	public Set<SlotBooking> getSlotBooking() {
@@ -63,7 +63,7 @@ public class Slot implements java.io.Serializable {
 
 	public void setSlotBooking(Set<SlotBooking> slotBooking) {
 		this.slotBooking = slotBooking;
-	}
+	}*/
 
 
 }
