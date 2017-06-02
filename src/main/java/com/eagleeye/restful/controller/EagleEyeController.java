@@ -149,23 +149,15 @@ public class EagleEyeController {
 	}
 	
 	@RequestMapping(value="/getusers",method = RequestMethod.GET)
-	public ResponseEntity<Set<Menu>> getAllUsers() {
+	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> users = userService.getAll();
 		if (users.isEmpty()) {
 			logger.debug("users does not exists");
 			//return new ResponseEntity<Menu>(HttpStatus.NO_CONTENT);
 		}
 		logger.debug("Found " + users.size() + " Employees");
-		logger.debug(Arrays.toString(users.toArray()));
-		User u = users.get(0);
-		logger.debug(u.getRole().getRoleName());
-		logger.debug(u.getRole().getMenu());
-		List ob = new ArrayList();
 		
-		//Set s =u.getRole().getMenu();
-		ob.addAll(u.getRole().getMenu());
-		//logger.debug(users.);
-		return new ResponseEntity<Set<Menu>>(u.getRole().getMenu(), HttpStatus.OK);
+		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 	
 	//.........................Menu controller.....................//
