@@ -48,6 +48,7 @@ import com.eagleeye.restful.service.SlotBookingService;
 import com.eagleeye.restful.service.SlotService;
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
+import com.eagleeye.restful.web.BookSlotStatus;
 import com.eagleeye.restful.web.MasterGroundFinal;
 import com.eagleeye.restful.web.RoleFinal;
 import com.eagleeye.restful.web.SlotFinalRequest;
@@ -495,30 +496,30 @@ public class EagleEyeController {
 	}
 	
 	@RequestMapping(value="/bookSlots",method=RequestMethod.POST)
-	public ResponseEntity<Void> bookSlots(@RequestBody SlotFinalRequest slotFinalRequest){
+	public ResponseEntity<BookSlotStatus> bookSlots(@RequestBody SlotFinalRequest slotFinalRequest){
 		logger.debug("Book Slots Entered..");
 		List<SlotBooking> bookSlots=slotFinalRequest.getBookslots();
+		List<SlotBooking> bookedSlots = new ArrayList<SlotBooking>();
+		BookSlotStatus bookSlotStatus = new BookSlotStatus();
+		try
+		{
+		
 		for(SlotBooking slotBooking : bookSlots){
-			//SlotBooking slotBooking = new SlotBooking();
 			
-			/*SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			java.util.Date date=null;
-			try {
-				//date = sdf1.parse(slotBooking.getDate());
-				date = slotBooking.getDate();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			java.sql.Date sqlStartDate = new Date(date.getTime()); 
-			logger.debug("sqlStartDate .."+sqlStartDate);*/
-			//slotBooking.setDate(sqlStartDate);
-			//slotBooking.setGroundId(slotRequest.getGroundId());
-			//slotBooking.setSlotId(slotRequest.getSlotId());
 			slotBooking.setStatus("Partial");
-			slotBookingService.save(slotBooking);
+			SlotBooking bookedSlot= slotBookingService.save(slotBooking);
+			bookedSlots.add(bookedSlot);
 		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		bookSlotStatus.setBookedSlots(bookedSlots);
+		bookSlotStatus.setBookStatus("Success");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			bookSlotStatus.setBookStatus("Failure");
+			
+		}
+		return new ResponseEntity<BookSlotStatus>(bookSlotStatus,HttpStatus.OK);
 	}
 	}
 	
