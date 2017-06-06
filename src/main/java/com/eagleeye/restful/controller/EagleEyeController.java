@@ -426,6 +426,7 @@ public class EagleEyeController {
 		logger.debug("Retriving total booking count..");
 		List<Integer> bookedIds= new ArrayList();
 				String place=null;
+				Date dateBook =null;
 				int totalBookings=customer.getSlotBooking().size();
 				List slotIds = new ArrayList();
 				List groundNames = new ArrayList();
@@ -435,7 +436,10 @@ public class EagleEyeController {
 					groundNames.add(ground.getGroundName());
 					slotIds.add(customer.getSlotBooking().get(i).getSlotId());
 					if(i==0)
+					{
 						place = ground.getMasterGround().getMasterGroundName();
+						 dateBook =customer.getSlotBooking().get(i).getDate();
+					}
 				}
 		
 	    logger.debug("confirming the slot for the bookings.. ");
@@ -445,6 +449,7 @@ public class EagleEyeController {
 		paymentConfirmation.setPlace(place);
 		paymentConfirmation.setGrounds(groundNames);
 		paymentConfirmation.setSlots(slotIds);
+		paymentConfirmation.setBookedDate(dateBook);
 		return new ResponseEntity<PaymentConfirmation>(paymentConfirmation,HttpStatus.OK);
 	}
 	;

@@ -23,8 +23,16 @@ public class Ground implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ground_id;
+	private Long ground_id;
 	
+	public Long getGround_id() {
+		return ground_id;
+	}
+
+	public void setGround_id(Long ground_id) {
+		this.ground_id = ground_id;
+	}
+
 	@Column(name="groundName", length=20)
 	private String groundName;
 	
@@ -49,14 +57,7 @@ public class Ground implements java.io.Serializable {
 		this.masterGround = masterGround;
 	}
 
-	public int getGround_id() {
-		return ground_id;
-	}
-
-	public void setGround_id(int ground_id) {
-		this.ground_id = ground_id;
-	}
-
+	
 	public String getGroundName() {
 		return groundName;
 	}

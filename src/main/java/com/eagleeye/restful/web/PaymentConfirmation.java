@@ -1,5 +1,6 @@
 package com.eagleeye.restful.web;
 
+import java.sql.Date;
 import java.util.List;
 
 public class PaymentConfirmation implements java.io.Serializable {
@@ -36,5 +37,11 @@ public class PaymentConfirmation implements java.io.Serializable {
 	private String place;
 	private List grounds;
 	private List slots;
-
+    private Date bookedDate;
+	public Date getBookedDate() {
+		return bookedDate;
+	}
+	public void setBookedDate(Date bookedDate) {
+		this.bookedDate = bookedDate;
+	}
 }
