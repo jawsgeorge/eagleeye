@@ -431,7 +431,7 @@ public class EagleEyeController {
 				List groundNames = new ArrayList();
 				for(int i=0;i<totalBookings;i++){
 					bookedIds.add(customer.getSlotBooking().get(i).getBook_id());
-					Ground ground = groundService.getById(customer.getSlotBooking().get(i).getGroundId());
+					Ground ground = groundService.getById(new Long(customer.getSlotBooking().get(i).getGroundId()));
 					groundNames.add(ground.getGroundName());
 					slotIds.add(customer.getSlotBooking().get(i).getSlotId());
 					if(i==0)
