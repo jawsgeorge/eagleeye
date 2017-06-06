@@ -50,6 +50,7 @@ import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.service.UserService;
 import com.eagleeye.restful.web.BookSlotStatus;
 import com.eagleeye.restful.web.MasterGroundFinal;
+import com.eagleeye.restful.web.PaymentConfirmation;
 import com.eagleeye.restful.web.RoleFinal;
 import com.eagleeye.restful.web.SlotFinalRequest;
 import com.eagleeye.restful.web.SlotFinalRespnse;
@@ -385,7 +386,7 @@ public class EagleEyeController {
 	//.........................Customer controller........................//
 	
 	@RequestMapping(value="/addCustomer",method=RequestMethod.POST)
-	public ResponseEntity<Void> addCustomer(@RequestBody CustomerBooking customer){
+	public ResponseEntity<PaymentConfirmation> addCustomer(@RequestBody CustomerBooking customer){
 		
 	int paidAmount=0;	
 	int totalCharge=0;
@@ -412,7 +413,7 @@ public class EagleEyeController {
 		customer.setPendingTransaction(pendingAmount);
 		customer.setTransactionStatus("pending");
 	}
-		customerService.save(customer);
+	CustomerBooking customerBooking = customerService.save(customer);
 		logger.debug("Added:: " + customer);
 		
 		List<CustomerPayment> arr=customer.getCustomerPayment();
@@ -424,19 +425,29 @@ public class EagleEyeController {
 		
 		logger.debug("Retriving total booking count..");
 		List<Integer> bookedIds= new ArrayList();
-				
+				String place=null;
 				int totalBookings=customer.getSlotBooking().size();
-				
+				List slotIds = new ArrayList();
+				List groundNames = new ArrayList();
 				for(int i=0;i<totalBookings;i++){
 					bookedIds.add(customer.getSlotBooking().get(i).getBook_id());
+					Ground ground = groundService.getById(customer.getSlotBooking().get(i).getGroundId());
+					groundNames.add(ground.getGroundName());
+					slotIds.add(customer.getSlotBooking().get(i).getSlotId());
+					if(i==0)
+						place = ground.getMasterGround().getMasterGroundName();
 				}
 		
 	    logger.debug("confirming the slot for the bookings.. ");
 		daoService.updateSlotStatus(bookedIds);
-		
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		PaymentConfirmation paymentConfirmation = new PaymentConfirmation();
+		paymentConfirmation.setReferenceNumber("Eagleeye"+customerBooking.getBookingReference());
+		paymentConfirmation.setPlace(place);
+		paymentConfirmation.setGrounds(groundNames);
+		paymentConfirmation.setSlots(slotIds);
+		return new ResponseEntity<PaymentConfirmation>(paymentConfirmation,HttpStatus.OK);
 	}
-	
+	;
 	
 	
 	
