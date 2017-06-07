@@ -235,14 +235,17 @@ public class EagleEyeController {
 		return new ResponseEntity<RoleFinal>(roleList, HttpStatus.OK);
 	}
 	@RequestMapping(value="/updateRole",method = RequestMethod.PUT)
-	public ResponseEntity<Void> updateRole(@RequestBody Role role) {
+	public ResponseEntity<RoleFinal> updateRole(@RequestBody Role role) {
+		RoleFinal roleList = new RoleFinal();
 		Role existingRole = roleService.getById(role.getRole_id());
 		if (existingRole == null) {
 			logger.debug("Role with id " + role.getRole_id() + " does not exists");
-			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<RoleFinal>(HttpStatus.NOT_FOUND);
 		} else {
 			roleService.save(role);
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			logger.debug("Updated role :: " + role);
+			roleList.setRoleList(roleService.getAll());
+			return new ResponseEntity<RoleFinal>(roleList,HttpStatus.OK);
 		}
 	}
 
