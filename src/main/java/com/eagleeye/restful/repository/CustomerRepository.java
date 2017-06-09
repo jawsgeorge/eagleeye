@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.eagleeye.restful.model.CustomerBooking;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<CustomerBooking, Long> {
+public interface CustomerRepository extends JpaRepository<CustomerBooking, Integer> {
 
 }

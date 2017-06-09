@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements Customerservice {
 
 	@Override
 	public CustomerBooking getById(Serializable id) {
-		return customerRepository.findOne((Long) id);
+		return customerRepository.findOne( (Integer) id);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements Customerservice {
 
 	@Override
 	public void delete(Serializable id) {
-		customerRepository.delete((Long) id);
+		customerRepository.delete( (Integer) id);
 
 	}
 

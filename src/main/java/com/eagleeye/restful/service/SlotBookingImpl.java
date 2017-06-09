@@ -23,7 +23,7 @@ public class SlotBookingImpl implements SlotBookingService {
 
 	@Override
 	public SlotBooking getById(Serializable id) {
-		return slotBooking.findOne((Long) id);
+		return slotBooking.findOne( (Integer) id);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class SlotBookingImpl implements SlotBookingService {
 
 	@Override
 	public void delete(Serializable id) {
-		slotBooking.delete((Long) id);
+		slotBooking.delete( (Integer) id);
 
 	}
 

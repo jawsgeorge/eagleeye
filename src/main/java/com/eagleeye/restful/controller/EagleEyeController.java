@@ -473,7 +473,7 @@ public class EagleEyeController {
 		}
 		
 		if(customerDetails.getMobileNumber()!=0){
-			bookingRef=daoService.getCustomerByMobile(customer.getMobileNumber());
+			bookingRef=daoService.getCustomerByMobile(customerDetails.getMobileNumber());
 			logger.debug("Customer booking id fetched" + bookingRef );
 		}
 		
@@ -484,14 +484,14 @@ public class EagleEyeController {
 				return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
 			}
 		
-		int totalBookings=customer.getSlotBooking().size();
+		/*int totalBookings=customer.getSlotBooking().size();
 		List<Integer> bookIds = new ArrayList();
 		for(int i=0;i<totalBookings;i++){
 			bookIds.add(customer.getSlotBooking().get(i).getBook_id());
-		}
+		}*/
   
 		
-		List<SlotBooking> bookings = new ArrayList();
+		/*List<SlotBooking> bookings = new ArrayList();
 		logger.debug("inside slot booking loop" );
 		for(int i=0;i<bookIds.size();i++){
 		bookings.add(slotBookingService.getById(bookIds.get(i)));
@@ -500,14 +500,14 @@ public class EagleEyeController {
 		for(int j=0;j<bookings.size();j++){
 			//slots.add(bookings.get(j).getSlot());
 		}
-			
-		logger.debug("after slot  loop" );
+			*/
+		//logger.debug("after slot  loop" );
 		bookedCustomer.setBookingReference(bookingRef);
 		bookedCustomer.setName(customer.getCustomerName());
 		bookedCustomer.setMobileNo(customer.getMobileNumber());
 		bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
 		bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
-		bookedCustomer.setBookings(bookings);
+		//bookedCustomer.setBookings(bookings);
 		//bookedCustomer.setSlots(slots);
 		
 		

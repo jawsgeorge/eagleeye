@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.eagleeye.restful.model.SlotBooking;
 
 @Repository
-public interface SlotBookingRepository extends JpaRepository<SlotBooking, Long> {
+public interface SlotBookingRepository extends JpaRepository<SlotBooking, Integer> {
 
 }
