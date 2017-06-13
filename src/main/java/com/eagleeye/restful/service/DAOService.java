@@ -122,13 +122,20 @@ public class DAOService {
 		  
 	  }
 	  
-	  public int getCustomerByMobile(long mobileNo){
+	  public List getCustomerByMobile(long mobileNo){
 		  String query6 = "select bookingReference from CustomerBooking where mobileNumber="+mobileNo;
-		  int bookRef= (int) entityManager.createQuery(query6).getSingleResult();
-		  return bookRef;
+		  List bookRefs=  entityManager.createQuery(query6).getResultList();
+		  return bookRefs;
 	  }
 	  
-	  
+	/*  public int getCustomerByReference(long referenceNo){
+		  String query6 = "select cb.customer_name,cb.mobile_number,cb.address,cb.amount,"+
+		  " csbm.slot_booking_book_id,cp.name,cp.amount as camount,cp.mobile_number as mnumber,"+
+		  " cp.mode from eagleeye.t_customer_booking as cb,t_customer_booking_slot_booking as csbm,t_customer_payment as cp"+
+		  " where cb.booking_reference=cp.booking_reference and cb.booking_reference=csbm.customer_booking_booking_reference="+referenceNo;
+		  int bookRef= (int) entityManager.createNativeQuery(query6).getResultList();
+				  return bookRef;
+	  }*/
 	// Private fields
 	  
 	  // An EntityManager will be automatically injected from entityManagerFactory

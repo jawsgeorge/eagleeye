@@ -460,29 +460,53 @@ public class EagleEyeController {
 	
 	
 	@RequestMapping(value="/getBookedCustomer",method=RequestMethod.POST)
-	public ResponseEntity<BookedCustomer> getBookedCustomer(@RequestBody CustomerBooking customerDetails){
+	public ResponseEntity<List<BookedCustomer>>  getBookedCustomer(@RequestBody CustomerBooking customerDetails){
 		int bookingRef=0;
-		BookedCustomer bookedCustomer = new BookedCustomer();
-		CustomerBooking customer=new CustomerBooking();
-		List<Slot> slots = new ArrayList();
+		
+		CustomerBooking customer=null;
+		List<BookedCustomer> bookedCustomers = new ArrayList();
 		
 		if(customerDetails.getBookingReference()!=0){
 			bookingRef=customerDetails.getBookingReference();
 			logger.debug("Customer booking id fetched" + bookingRef );
+			customer = customerService.getById(bookingRef);
+			if (customer == null) {
+				logger.debug("Customer with id " + bookingRef + "  does not exists");
+				return new ResponseEntity<List<BookedCustomer>>(HttpStatus.NOT_FOUND);
+			}
+			BookedCustomer bookedCustomer = new BookedCustomer();
+			bookedCustomer.setBookingReference(bookingRef);
+			bookedCustomer.setName(customer.getCustomerName());
+			bookedCustomer.setMobileNo(customer.getMobileNumber());
+			bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
+			bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
+			bookedCustomers.add(bookedCustomer);
 			 
 		}
 		
 		if(customerDetails.getMobileNumber()!=0){
-			bookingRef=daoService.getCustomerByMobile(customerDetails.getMobileNumber());
+			List<Object[]> bookingRefs=daoService.getCustomerByMobile(customerDetails.getMobileNumber());
+			for (Object[] row : bookingRefs) {
+				bookingRef = (int)row[0];
 			logger.debug("Customer booking id fetched" + bookingRef );
+			customer = customerService.getById(bookingRef);
+			if (customer == null) {
+				logger.debug("Customer with id " + bookingRef + "  does not exists");
+				return new ResponseEntity<List<BookedCustomer>>(HttpStatus.NOT_FOUND);
+			}
+			BookedCustomer bookedCustomer = new BookedCustomer();
+			bookedCustomer.setBookingReference(bookingRef);
+			bookedCustomer.setName(customer.getCustomerName());
+			bookedCustomer.setMobileNo(customer.getMobileNumber());
+			bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
+			bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
+			bookedCustomers.add(bookedCustomer);
+			}
 		}
 		
-		customer = customerService.getById(bookingRef);
+		
 		logger.debug("Customer object fetched" );
-		 if (customer == null) {
-				logger.debug("Customer with id " + bookingRef + "  does not exists");
-				return new ResponseEntity<BookedCustomer>(HttpStatus.NOT_FOUND);
-			}
+		 
 		
 		/*int totalBookings=customer.getSlotBooking().size();
 		List<Integer> bookIds = new ArrayList();
@@ -502,16 +526,27 @@ public class EagleEyeController {
 		}
 			*/
 		//logger.debug("after slot  loop" );
-		bookedCustomer.setBookingReference(bookingRef);
-		bookedCustomer.setName(customer.getCustomerName());
-		bookedCustomer.setMobileNo(customer.getMobileNumber());
-		bookedCustomer.setPendingTransaction(customer.getPendingTransaction());
-		bookedCustomer.setTransactionStatus(customer.getTransactionStatus());
+		
 		//bookedCustomer.setBookings(bookings);
 		//bookedCustomer.setSlots(slots);
 		
 		
-		return new ResponseEntity<BookedCustomer>(bookedCustomer,HttpStatus.OK);
+		return new ResponseEntity<List<BookedCustomer>>(bookedCustomers,HttpStatus.OK);
+	}
+	@RequestMapping(value="/getCustomerReference",method=RequestMethod.POST)
+	public ResponseEntity<CustomerBooking>  getCustomerReference(@RequestBody CustomerBooking customerDetails){
+		CustomerBooking customerBooking = null;;
+		
+		if(customerDetails.getBookingReference()!=0){
+			int bookingRef=customerDetails.getBookingReference();
+			logger.debug("Customer booking id fetched" + bookingRef );
+			customerBooking = customerService.getById(bookingRef);
+			if (customerBooking == null) {
+				logger.debug("Customer with id " + bookingRef + "  does not exists");
+				return new ResponseEntity<CustomerBooking>(HttpStatus.NOT_FOUND);
+			}
+		}
+		return new ResponseEntity<CustomerBooking>(customerBooking,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/bookSlots",method=RequestMethod.POST)
