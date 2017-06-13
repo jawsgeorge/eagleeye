@@ -122,9 +122,9 @@ public class DAOService {
 		  
 	  }
 	  
-	  public List getCustomerByMobile(long mobileNo){
+	  public  List<Object[]> getCustomerByMobile(long mobileNo){
 		  String query6 = "select bookingReference from CustomerBooking where mobileNumber="+mobileNo;
-		  List bookRefs=  entityManager.createQuery(query6).getResultList();
+		  List<Object[]> bookRefs=  entityManager.createQuery(query6).getResultList();
 		  return bookRefs;
 	  }
 	  

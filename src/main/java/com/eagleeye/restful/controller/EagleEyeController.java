@@ -486,8 +486,10 @@ public class EagleEyeController {
 		
 		if(customerDetails.getMobileNumber()!=0){
 			List<Object[]> bookingRefs=daoService.getCustomerByMobile(customerDetails.getMobileNumber());
-			for (Object[] row : bookingRefs) {
-				bookingRef = (int)row[0];
+			Integer[] arg = (Integer[]) bookingRefs.toArray(new Integer[bookingRefs.size()]);
+			for (int i=0;i<arg.length;i++) {
+				logger.debug("value is slot id : "+arg[0]);
+				bookingRef = (int)arg[0];
 			logger.debug("Customer booking id fetched" + bookingRef );
 			customer = customerService.getById(bookingRef);
 			if (customer == null) {
