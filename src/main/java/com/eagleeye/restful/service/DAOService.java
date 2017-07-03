@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.eagleeye.restful.model.User;
 import com.eagleeye.restful.model.UserDAO;
+import com.eagleeye.restful.model.CustomerBooking;
 import com.eagleeye.restful.model.CustomerPayment;
 import com.eagleeye.restful.web.SlotDetailsResponse;
 import com.eagleeye.restful.web.SlotFinalRespnse;
@@ -126,6 +127,35 @@ public class DAOService {
 		  String query6 = "select bookingReference from CustomerBooking where mobileNumber="+mobileNo;
 		  List<Object[]> bookRefs=  entityManager.createQuery(query6).getResultList();
 		  return bookRefs;
+	  }
+	  
+	  public int updateCustomer( int amount, CustomerBooking customer){
+		  
+		  int pendingAmount=customer.getPendingTransaction()-amount;
+		  String transactionStatus=""; 
+		  if(pendingAmount==0){
+			  transactionStatus="'cleared'";
+		  }else if (pendingAmount>0){
+			  transactionStatus="'pending'";
+		  }
+		  
+		 
+		  String query8 = "update CustomerBooking set pendingTransaction="+pendingAmount+","+" transactionStatus="+transactionStatus+" where bookingReference="+customer.getBookingReference();
+		 
+		
+		  
+		  int result1=entityManager.createQuery(query8).executeUpdate();
+		  
+		  if(result1==1){
+			  logger.debug("Customer booking table updated successfully ");
+			  return customer.getBookingReference();
+		  }else{
+			  logger.debug("Customer booking table not updated successfully ");
+			  return 0;
+		  }
+		  
+		 
+		  
 	  }
 	  
 	/*  public int getCustomerByReference(long referenceNo){

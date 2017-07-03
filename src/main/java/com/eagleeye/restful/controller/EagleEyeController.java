@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,8 @@ import com.eagleeye.restful.web.RoleFinal;
 import com.eagleeye.restful.web.SlotFinalRequest;
 import com.eagleeye.restful.web.SlotFinalRespnse;
 import com.eagleeye.restful.web.SlotRequest;
+import com.eagleeye.restful.web.UpdateCustomerDetails;
+import com.eagleeye.restful.web.UpdateCustomerRequest;
 import com.eagleeye.restful.web.UserFinal;
 import com.eagleeye.restful.model.UserDAO;
 /**
@@ -111,6 +114,8 @@ public class EagleEyeController {
 	 
 	 @Autowired
 	 DAOService daoService;
+	 
+	 
 	
 	//.............................User Controller.........................//
 
@@ -577,6 +582,46 @@ public class EagleEyeController {
 		}
 		return new ResponseEntity<BookSlotStatus>(bookSlotStatus,HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping (value="/updateCustomer", method=RequestMethod.POST)
+	public ResponseEntity<Void> editCustomer(@RequestBody UpdateCustomerRequest updateCustDetails){
+		
+		
+		int addedAmount=0;
+		int result=0;
+		List<UpdateCustomerDetails> updateDetails = updateCustDetails.getCustomerPayment();
+		
+		CustomerBooking customer= customerService.getById(updateDetails.get(0).getBookingReference()) ;
+		
+		
+		for(int i=0;i<updateDetails.size();i++){
+			CustomerPayment payment = new CustomerPayment();
+			payment.setAmount(updateDetails.get(i).getAmount());
+			payment.setMobileNumber(updateDetails.get(i).getMobileNumber());
+			payment.setMode(updateDetails.get(i).getMode());
+			payment.setName(updateDetails.get(i).getName());
+			payment.setCustomerBooking(customer);
+			paymentService.save(payment);
+			addedAmount=addedAmount+payment.getAmount();
+		}
+	 
+		 result=daoService.updateCustomer(addedAmount,customer);
+		
+		
+		
+		if(result!=0){
+			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+		}else{
+			return new ResponseEntity<Void>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
+		
+		
+		
+	}
+	
+	
 	}
 	
 	
