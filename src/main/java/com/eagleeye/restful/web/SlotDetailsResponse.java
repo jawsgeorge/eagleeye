@@ -9,6 +9,20 @@ public class SlotDetailsResponse implements java.io.Serializable {
 	private static final long serialVersionUID = 976945233940379216L;
 	
 	private String groundConfigCode;
+	private boolean isSubGround;
+	private String groundName;
+	public String getGroundName() {
+		return groundName;
+	}
+	public void setGroundName(String groundName) {
+		this.groundName = groundName;
+	}
+	public boolean getIsSubGround() {
+		return isSubGround;
+	}
+	public void setIsSubGround(boolean isSubGround) {
+		this.isSubGround = isSubGround;
+	}
 	public String getGroundConfigCode() {
 		return groundConfigCode;
 	}

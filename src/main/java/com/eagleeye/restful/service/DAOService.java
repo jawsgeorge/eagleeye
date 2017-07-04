@@ -54,7 +54,11 @@ public class DAOService {
 				  slotDetailsResponse.setGroundId((int)rowMaster[2]);
 				  slotDetailsResponse.setGroundConfigCode((String)rowMaster[4]);
 				  slotDetailsResponse.setGroundData((String)rowMaster[5]);
-
+				  slotDetailsResponse.setGroundName((String)rowMaster[3]);
+				  if("Single".equalsIgnoreCase(slotDetailsResponse.getGroundData()))
+					  slotDetailsResponse.setIsSubGround(false);
+				  else
+					  slotDetailsResponse.setIsSubGround(true);
 				  String query =" select slot.slot_id,slot.start_time,slot.end_time,booking.status,booking.date, "+
 				  " ground.ground_id,ground.ground_name from eagleeye.t_slot as slot, eagleeye.t_slot_booking as booking, "+
 			      " eagleeye.t_ground as ground where slot.slot_id=booking.slot_id and booking.ground_id = ground.ground_id  "+
@@ -82,6 +86,7 @@ public class DAOService {
 							  slotResponse.setGroundId((int)row[5]);
 							  logger.debug("value is ground name : "+row[6]); 
 							  slotResponse.setGroundName((String)row[6]);
+							  slotResponse.setMasterGroundId(slotDetailsResponse.getMasterGroundId());
 							  slotList.add(slotResponse);
 						  }
 						  slotDetailsResponse.setSlots(slotList);

@@ -58,4 +58,11 @@ public class SlotResponse implements java.io.Serializable {
 	private Date bookingDate;
 	private int groundId;
 	private String groundName;
+	private long masterGroundId;
+	public long getMasterGroundId() {
+		return masterGroundId;
+	}
+	public void setMasterGroundId(long masterGroundId) {
+		this.masterGroundId = masterGroundId;
+	}
 }

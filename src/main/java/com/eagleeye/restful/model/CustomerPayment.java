@@ -27,9 +27,17 @@ public class CustomerPayment implements java.io.Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int payment_id;
 	
-	@Column(name="Name",length=10)
-	private String Name;
+	@Column(name="name",length=10)
+	private String name;
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Column(name="amount",length=10)
 	private int amount;
 	
@@ -53,13 +61,7 @@ public class CustomerPayment implements java.io.Serializable {
 		this.payment_id = payment_id;
 	}
 
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
+	
 
 	public int getAmount() {
 		return amount;
@@ -95,7 +97,7 @@ public class CustomerPayment implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "CustomerPayment [payment_id=" + payment_id + ", Name=" + Name + ", amount=" + amount + ", mobileNumber="
+		return "CustomerPayment [payment_id=" + payment_id + ", name=" + name + ", amount=" + amount + ", mobileNumber="
 				+ mobileNumber + ", mode=" + mode + ", customerBooking=" + customerBooking + "]";
 	}
 	
