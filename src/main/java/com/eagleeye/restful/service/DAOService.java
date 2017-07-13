@@ -40,8 +40,8 @@ public class DAOService {
 	        .getSingleResult();*/
 			  
 			  String groundQuery =" select mast.master_ground_id,mast.master_ground_name, "
-					  +" ground.ground_id,ground.ground_name,ground.size,ground.type from eagleeye.t_master_ground mast,eagleeye.t_ground ground "
-					  +"where mast.master_ground_id="+slotRequest.getMasterGroundId()+" and mast.master_ground_id=ground.master_ground_id";
+					  +" ground.ground_id,ground.ground_name,ground.size,ground.type,ground.linked_ground_id from eagleeye.t_master_ground mast,eagleeye.t_ground ground "
+					  +" where mast.master_ground_id="+slotRequest.getMasterGroundId()+" and mast.master_ground_id=ground.master_ground_id";
 			 
 			  
 			  List<Object[]> rowsMaster =  entityManager.createNativeQuery(groundQuery)
@@ -56,9 +56,16 @@ public class DAOService {
 				  slotDetailsResponse.setGroundData((String)rowMaster[5]);
 				  slotDetailsResponse.setGroundName((String)rowMaster[3]);
 				  if("Single".equalsIgnoreCase(slotDetailsResponse.getGroundData()))
+				  {
 					  slotDetailsResponse.setIsSubGround(false);
+				  }
 				  else
+				  {
 					  slotDetailsResponse.setIsSubGround(true);
+					  String linkedGroundValue = (String)rowMaster[6];
+					  if(linkedGroundValue !=null && linkedGroundValue.trim().length() > 0)
+					  slotDetailsResponse.setLinkedGroundId(Long.parseLong(linkedGroundValue));
+				  }
 				  String query =" select slot.slot_id,slot.start_time,slot.end_time,booking.status,booking.date, "+
 				  " ground.ground_id,ground.ground_name from eagleeye.t_slot as slot, eagleeye.t_slot_booking as booking, "+
 			      " eagleeye.t_ground as ground where slot.slot_id=booking.slot_id and booking.ground_id = ground.ground_id  "+

@@ -57,5 +57,12 @@ public class SlotDetailsResponse implements java.io.Serializable {
 	public void setGroundId(long groundId) {
 		this.groundId = groundId;
 	}
+	private long linkedGroundId;
+	public long getLinkedGroundId() {
+		return linkedGroundId;
+	}
+	public void setLinkedGroundId(long linkedGroundId) {
+		this.linkedGroundId = linkedGroundId;
+	}
 
 }
